@@ -42,6 +42,7 @@ class Course(scrapy.Item):
     course_link = scrapy.Field()
     course_img = scrapy.Field()
     course_price = scrapy.Field()
+    course_num = scrapy.Field()
     course_source = scrapy.Field()  # 来源
     course_tag = scrapy.Field()     # 标签
 

@@ -2,6 +2,7 @@
 import scrapy
 from .. import Util
 from .. import items
+import re
 
 
 class courseSpider3(scrapy.Spider):
@@ -13,10 +14,9 @@ class courseSpider3(scrapy.Spider):
 
     def parse(self, response):
         select = response.xpath("//section[1]/div/div[3]/ul/li")
-        print("############# select_len", len(select))
         i = 0;
 
-        while True:
+        while True and i < 34:
             # 解析24个课程
             for course in select:
                 item = items.Course()
@@ -25,32 +25,28 @@ class courseSpider3(scrapy.Spider):
                 item["course_link"] = course.xpath("h4/a/@href").get()
                 item["course_img"] = course.xpath("a/img/@src").get()
                 item["course_price"] = course.xpath("div[2]/span[1]/text()").get()
+                course_num = course.xpath("div[2]/span[2]/text()").get()
+                item["course_num"] = re.findall("\\d+", course_num)
                 item["course_source"] = course.xpath("div[1]/a/text()").get()
                 item["course_tag"] = "tag"
-                print("############## ", item["course_name"])
                 yield item
 
             # 产生下一页
+            i += 1
             next_page_item = response.xpath("//section[1]/div/div[5]/a[6]/@href").get()
-            print("############# next_page_item: ", next_page_item)
 
             if next_page_item == "javascript:void(0);":
-                break;
+                break
 
             if next_page_item is not None:
-                print("### 进入下一页")
                 yield scrapy.Request(next_page_item, callback=self.parse)
-
-            # i+=1
 
         # 爬取下一类
         try:
             self.cate_id, self.cate_link = next(self.category)
             url = "http://" + self.allowed_domains[0] + "/course/list?" + self.cate_link
-            print("### request, url: ", url)
             yield scrapy.Request(url, callback=self.parse)
         except StopIteration:
-            print("########### 进入下一类")
             pass
 
 

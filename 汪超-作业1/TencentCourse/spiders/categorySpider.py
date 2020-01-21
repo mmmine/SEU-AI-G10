@@ -3,7 +3,7 @@ import scrapy
 # from items import CourseCategories
 from .. import items
 
-
+# 一级类别
 class CategoryspiderSpider(scrapy.Spider):
     name = 'categorySpider'
     allowed_domains = ['ke.qq.com']

@@ -32,22 +32,9 @@ class TencentCategoriesPipeline(object):
 
         if spider.name == "courseSpider":
             print("### courseSpider-pipeline")
-            sql = "insert into course values(NULL, %s, %s, %s, %s, %s, %s, %s)"
-
-            # self.cursor.execute(sql, (item.category, item.course_name, item.course_link, item.course_img,
-            #                           item.course_price, item.course_source, item.course_tag))
+            sql = "insert into course values(NULL, %s, %s, %s, %s, %s, %s, %s, %s)"
 
             self.cursor.execute(sql, (item["category"], item["course_name"], item["course_link"], item["course_img"],
-                                      item["course_price"], item["course_source"], item["course_tag"]))
+                                      item["course_price"], item["course_num"], item["course_source"], item["course_tag"]))
             self.conn.commit()
 
-
-class TencentSubCategoriesPipeline(object):
-    def process_item(self, item, spider):
-        print("##pipeline###########################################################################")
-
-        sql = "insert into categories values(NULL, %s, %s)"
-        link = item["category_link"]
-
-        self.cursor.execute(sql, (item["category_name"], link[link.index("?") + 1 :]))
-        self.conn.commit()

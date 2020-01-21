@@ -20,10 +20,6 @@ def getCategory():
         yield item[0], item[2]
 
 
-sql = "select * from categories"
-category = getQueryList(sql)
-
-
 
 
 
